@@ -1,0 +1,7 @@
+{
+  "name": "House of El, Compass",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
