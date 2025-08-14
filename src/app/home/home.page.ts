@@ -87,7 +87,7 @@ export class HomePage {
   // Initialize the map
   private initMap(): void {
     const defaultIcon = L.icon({
-      iconUrl: '../assets/images/compass.png',
+      iconUrl: 'assets/images/compass.png',
       iconSize: [110, 110],
       iconAnchor: [50, 50],
       popupAnchor: [0, 0],
@@ -95,7 +95,7 @@ export class HomePage {
     });
 
     var prayIcon = L.icon({
-      iconUrl: '../assets/images/pray.png',
+      iconUrl: 'assets/images/pray.png',
       iconSize: [100, 100],
       iconAnchor: [30, 30],
       popupAnchor: [0, 0],

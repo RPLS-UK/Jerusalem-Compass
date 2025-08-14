@@ -1,12 +1,12 @@
 {
-  "name": "house-of-el-compass",
-  "version": "0.0.7",
+  "name": "jerusalem-compass",
+  "version": "1.0.1",
   "author": "Ranul Ladduwahetty",
   "homepage": "https://rpls-uk.github.io/Jerusalem-Compass",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ionic build --prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
@@ -70,5 +70,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.0"
   },
-  "description": "An app to find House of God for praying, for people of God"
+  "description": "An app to find House of God for praying"
 }
