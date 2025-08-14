@@ -8,9 +8,28 @@
   transform: translateY(-50%);
 }
 
+ion-title {
+  text-align: center;
+}
+
+ion-modal {
+  --border-radius: 10px;
+  padding: 20px;
+}
+
 #container strong {
   font-size: 20px;
   line-height: 26px;
+}
+#map {
+  border-radius: 5px;
+  -webkit-box-shadow: -2px 0px 16px -2px #d0d0d0;
+  box-shadow: -2px 0px 16px -2px #b6b6b6;
+}
+#location {
+  border-radius: 5px;
+  -webkit-box-shadow: -2px 0px 16px -2px #d0d0d0;
+  box-shadow: -2px 0px 16px -2px #b6b6b6;
 }
 
 #container p {
@@ -18,10 +37,18 @@
   line-height: 22px;
 
   color: #8c8c8c;
-
   margin: 0;
 }
 
 #container a {
   text-decoration: none;
+}
+
+ion-row {
+  text-align: center;
+}
+
+#message {
+  text-justify: distribute;
+  padding: 15px;
 }

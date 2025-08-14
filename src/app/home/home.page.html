@@ -1,20 +1,340 @@
+<!-- Title -->
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title> Jerusalem Compass </ion-title>
   </ion-toolbar>
 </ion-header>
-
+<!-- Context -->
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <!-- Loader-->
+  <ion-grid>
+    <ion-row class="order-xs-reverse">
+      <!-- Temple Location -->
+      <ion-col size-xs="12" size-lg="6">
+        <ion-card>
+          <ion-card-header id="aboutHolyTemple" style="cursor: pointer">
+            <ion-card-title>Holy Temple of Jerusalem </ion-card-title>
+            <ion-card-subtitle>
+              <ion-icon
+                name="help-circle"
+                color="dark"
+                style="font-size: 70px"
+              ></ion-icon>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div id="map" style="height: 70vh"></div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Client Location -->
+      <ion-col size-xs="12" size-lg="6">
+        <ion-card>
+          <ion-card-header id="aboutYourLocation" style="cursor: pointer">
+            <ion-card-title>Your Location</ion-card-title>
+            <ion-card-subtitle>
+              <ion-icon
+                name="help-circle"
+                color="dark"
+                style="font-size: 70px"
+              ></ion-icon>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div id="location" style="height: 70vh">
+              <h1
+                *ngIf="!locationServices"
+                style="
+                  color: rgb(0, 0, 0);
+                  padding-top: 30vh;
+                  z-index: 1000;
+                  position: relative;
+                  font-weight: bold;
+                  cursor: pointer;
+                "
+                id="noLocationServices"
+              >
+                <ion-icon
+                  name="information-circle"
+                  color="danger"
+                  size="large"
+                ></ion-icon
+                ><br />LOCATION PERMISSION NOT ALLOWED
+              </h1>
+              <img src="assets/images/ה-compass.png" [style]="point" />
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!-- Active Track -->
+      <ion-col *ngIf="!activeTrack">
+        <p>
+          Click to retrieve prayer direction with <b>Active Track</b> to use
+          your device compass to find all places at your home or office with
+          bearings to the Holy Temple.
+        </p>
+        <ion-button
+          shape="round"
+          color="tertiary"
+          (click)="getHighAccuracyBearing()"
+          [disabled]="!locationServices || deviceAngleDelta > 0"
+          >Active Track</ion-button
+        >
+      </ion-col>
+      <ion-col *ngIf="activeTrack">
+        <h1 color="tertiary">
+          <ion-icon
+            name="navigate-circle"
+            color="tertiary"
+            size="large"
+          ></ion-icon
+          ><br />Active Tracking Enabled
+        </h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card color="tertiary">
+          <h1>
+            <ion-icon name="happy"></ion-icon>
+            <br />
+            Developer's Message
+          </h1>
+          <p id="message">
+            This service was made available to the people to remind that
+            <i>goodness matters</i>, Jerusalem also called as a Queen or a
+            Mother has been deeply embraced by Jews and Muslims for centuries.
+            When people of the holy land sinned she was despised by God but when
+            they turned to holiness Jerusalem was honored and blessed.
+            <br />
+            <br />
+            As a Christian as much as embracing the heavenly Jerusalem, and it's
+            only path is by righteousness reminds that Jerusalem of the Holy
+            Land is a place where we all can remind, build in the nature of
+            undefiled Holy Jerusalem with a holy nature and spirit, convert to
+            God where ever we are and live in God's ways together as "one stick"
+            or "one people of GOD" without divisions but as one children of the
+            Holy Mother Jerusalem and the Father GOD.
+            <br /><br />
+            All services are <b>offered free of charge</b>, you may make a
+            <i>donation</i> although its not necessary but any contributions
+            will be used for covering operational fees. <br />
+          </p>
+          <a
+            href="https://www.paypal.com/donate/?hosted_button_id=23V4PEV4H5F3W"
+          >
+            <img
+              src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+            />
+          </a>
+        </ion-card>
+        <img
+          src="https://avatars.githubusercontent.com/u/137690000?s=200&v=4"
+          style="margin: auto; height: 20vh"
+        />
+        <br />
+        <!-- <small color="dark"
+          >RPLS (company number: 14913384) is no longer located in the United
+          Kingdom, or is a legal entity. All rights were transfered back to its
+          founders when operations were suspended.</small
+        > -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
+<!-- INFO WINDOWS -->
+
+<!-- NO LOCATION MODAL -->
+<ion-modal #noLocationServices trigger="noLocationServices">
+  <ng-template>
+    <ion-footer>
+      <ion-button
+        expand="block"
+        (click)="noLocationServices.dismiss()"
+        color="danger"
+        >Close
+      </ion-button>
+    </ion-footer>
+    <ion-content class="ion-padding">
+      <h1 style="text-align: center">
+        <ion-icon
+          name="information-circle"
+          color="primary"
+          size="large"
+        ></ion-icon>
+        <br />Location Services Requirement
+      </h1>
+      <p>
+        - Please enable location services in your brower and device to provide
+        your bearings to the Holy Temple.
+        <br /><br />
+        - Please visit site permissions on your browser and allow location
+        access, your location data is only shared to OpenStreetMaps to generate
+        visuals and is not stored elsewhere, every other data is processed on
+        your browser.
+      </p>
+      <br />
+      <h3>Troubleshooting</h3>
+      <h5>For Apple/Safari installed devices</h5>
+      <a href="https://support.apple.com/en-gb/102647"
+        >https://support.apple.com/en-gb/102647</a
+      >
+      <h5>For Android/Google Chrome installed devices</h5>
+      <a
+        href="https://support.google.com/chrome/answer/142065?co=GENIE.Platform%3DDesktop&oco=1"
+        >https://support.google.com/chrome/answer/142065</a
+      >
+      <br /><br />
+      <br />
+      <small>
+        Contact: <a href="mailto:support@rpls.uk">support@rpls.uk</a> for any
+        other inquiries.
+      </small>
+      <br /><br />
+      <br />
+      <p color="medium">
+        <small>
+          <small>
+            Apple, Android, Google Chrome and Safari are trademarks of their
+            respective companies.
+          </small>
+        </small>
+      </p>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- ABOUT HOLY TEMPLE -->
+<ion-modal #aboutHolyTemple trigger="aboutHolyTemple">
+  <ng-template>
+    <ion-footer>
+      <ion-button
+        expand="block"
+        (click)="aboutHolyTemple.dismiss()"
+        color="medium"
+        >Close
+      </ion-button>
+    </ion-footer>
+    <ion-content class="ion-padding">
+      <h1 style="text-align: center">
+        <ion-icon
+          name="information-circle"
+          color="primary"
+          size="large"
+        ></ion-icon>
+        <br />
+        Holy Temple of Jerusalem, Israel
+      </h1>
+      <p>
+        The Holy Temple of Jerusalem was first build by King Solomon to fulfill
+        his father King David's dream of building a Palace for the God (El
+        Shaddai) of their forefathers.
+        <br /><br />
+        This area has been conquered and claimed by many rulers in the past,
+        during these conquests the Holy Temple was broken and rebuilt to
+        different antique designs of its time and their rulers.
+        <br /><br />
+        Jerusalem, is a widely known and visited place by many people of
+        different faiths from around the world commonly Christians, Jews and
+        Muslims to pray to GOD as this place was declared by God as a place He
+        would set His Name.
+      </p>
+      <img
+        src="assets/images/family.png"
+        style="height: 48vh; border-radius: 7px; margin: auto"
+      />
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- ABOUT BEARINGS -->
+<ion-modal #aboutYourLocation trigger="aboutYourLocation">
+  <ng-template>
+    <ion-footer>
+      <ion-button
+        expand="block"
+        (click)="aboutYourLocation.dismiss()"
+        color="medium"
+        >Close
+      </ion-button>
+    </ion-footer>
+    <ion-content class="ion-padding">
+      <h1 style="text-align: center">
+        <ion-icon
+          name="information-circle"
+          color="primary"
+          size="large"
+        ></ion-icon>
+        <br />
+        Understanding Your Location
+      </h1>
+      <p>
+        Once enabled your location would be fetched and displayed next to Map of
+        the Holy Temple. <br />
+        The map contains two compass's the centre <b>Blue Compass</b> will help
+        you identify how your location is with orientation to the <b>North</b>.
+        The <b>Golden Compass</b> would display the exact direction of prayer is
+        to the Holy Temple<sup>1</sup>
+      </p>
+      <h3>Understanding Bearings</h3>
+      <h5>North Bearing</h5>
+      <p>
+        Most devices come equipped with <b>GPS</b> but not all of them have a
+        digital compass, due to this <b>Jerusalem Compass</b> was designed to
+        work on every device possible helping you. <br /><br />
+        When location is enabled your
+        <b>Blue Compass</b> will show how you and the <b>North</b> is aligned
+        from your position. So if you live in a house check roads and other
+        buildings nearby to see how your house, them and the North is displayed
+        and aligned.
+        <br />
+        <b>Golden Compass</b> will show you the bearings of the Holy Temple from
+        your position, remember it will calculate this from
+        <b>North</b> assuming you are facing <b>North</b>. Use the information
+        to understand your positioning and identify where is the direction of
+        the <b>Holy Temple</b>.
+      </p>
+      <h5>Active Compass Bearing (Only on supported devices)</h5>
+      <p>
+        If you have device with a Compass built in press the
+        <b>Active Track</b> button, even if you aren't aware of this pressing it
+        won't effect the functioning of the application. <br /><br />
+        Once activated it would make the <b>Golden Compass</b> change its
+        bearings facing the <b>Holy Temple</b> as you rotate your device the
+        compass too will rotate, if your device is not equipped the
+        <b>Golden Compass</b> will take its bearing from <b>North</b>. Note this
+        time the application will show bearings where your device is actually
+        facing, namely if its your phone the upper ear piece region of your
+        phone and the direction its facing or if its a laptop the direction of
+        its screen.<br /><br />
+        This extra option does not come pre-enabled to allow the application to
+        work well on low memory devices<sup>2</sup>, once activated despite
+        permission(s) to compass or availablity the application you continue to
+        check for a response from your device to adjust the bearing. This is the
+        most accurate bearing and is easy to use if your device is equipped, but
+        worry not you can always use the application if you have location
+        services enabled despite not having a compass with a little bit of
+        hassel to find the true directions but it'll be fun a activity to try!
+      </p>
+      <br /><br />
+      <small>
+        <sup>1</sup>
+        Although the Holy Temple is displayed left to your location or above
+        your location, you should always only use compass's in the
+        <b>Your Location Map</b> as the first map is for visual purposes only.
+        <br />
+        <sup>2</sup>
+        If you have low memory device or would like resolve any issues you find
+        with the application, delete site data from your browser related to
+        <b>rpls.uk</b>
+        and reset permissions.
+        <br /><br />
+        Send an email to
+        <a href="mailto:support@rpls.uk">support@rpls.uk</a> for any issues,
+        feedback or questions your may have.
+      </small>
+    </ion-content>
+  </ng-template>
+</ion-modal>
